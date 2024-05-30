@@ -1,0 +1,42 @@
+!pip install opencv-python
+import cv2
+import time
+from datetime import datetime
+
+# 開啟攝影機
+cap = cv2.VideoCapture(0)
+
+# 確保攝影機已成功開啟
+if not cap.isOpened():
+    print("無法開啟攝影機")
+    exit()
+
+while True:
+    # 讀取一幀影片
+    ret, frame = cap.read()
+
+    # 檢查是否成功讀取幀
+    if not ret:
+        print("無法讀取幀")
+        break
+
+    # 獲取當前時間
+    current_time = datetime.now()
+
+    # 將時間格式化為年月日時分秒的字串，例如：2024-05-30_143020.jpg
+    filename = current_time.strftime("%Y-%m-%d_%H%M%S.jpg")
+
+    # 保存幀圖像
+    cv2.imwrite(filename, frame)
+    print(f"已保存幀圖像: {filename}")
+
+    # 顯示影片幀
+    cv2.imshow('Frame', frame)
+
+    # 按下 'esc' 鍵退出迴圈
+    if cv2.waitKey(1) == 27:
+        break
+
+# 釋放攝影機資源
+cap.release()
+cv2.destroyAllWindows()
